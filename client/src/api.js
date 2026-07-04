@@ -1,9 +1,12 @@
 import axios from 'axios';
 
+// Relative baseURL — Vite's dev server proxies /api to the backend (see
+// vite.config.js), so this works identically whether accessed via
+// localhost or a public tunnel URL, with no CORS configuration needed.
 // withCredentials is required to send/receive the httpOnly auth cookie
 // the backend sets on login/register.
 const api = axios.create({
-  baseURL: 'http://localhost:5050/api',
+  baseURL: '/api',
   withCredentials: true,
 });
 
