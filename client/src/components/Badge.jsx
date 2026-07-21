@@ -1,6 +1,6 @@
 const TONES = {
-  gray: 'bg-gray-100 text-gray-600',
-  indigo: 'bg-indigo-50 text-indigo-600',
+  gray: 'bg-surface-container text-on-surface-variant',
+  indigo: 'bg-primary-container text-on-primary-container',
 };
 
 export default function Badge({ icon: Icon, tone = 'gray', children }) {
