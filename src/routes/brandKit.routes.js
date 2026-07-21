@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 
 const authMiddleware = require('../middlewares/auth.middleware');
-const uploadImage = require('../middlewares/upload.middleware');
 const validate = require('../middlewares/validate.middleware');
 
 const {
@@ -16,7 +15,8 @@ const {
     getBrandKitsController,
     getBrandKitController,
     updateBrandKitController,
-    deleteBrandKitController
+    deleteBrandKitController,
+    generateLogoController
 } = require('../controllers/brandKit.controller');
 
 // Every route below is authenticated and scoped to the caller's own brand
@@ -71,9 +71,14 @@ const {
  *               $ref: '#/components/schemas/ApiErrorResponse'
  */
 router.post(
+    '/generate-logo',
+    authMiddleware,
+    generateLogoController
+);
+
+router.post(
     '/',
     authMiddleware,
-    uploadImage.single('logo'),
     validate(createBrandKitValidator),
     createBrandKitController
 );
@@ -202,7 +207,6 @@ router.get(
 router.put(
     '/:id',
     authMiddleware,
-    uploadImage.single('logo'),
     validate(updateBrandKitValidator),
     updateBrandKitController
 );
