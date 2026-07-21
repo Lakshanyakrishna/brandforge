@@ -2,7 +2,6 @@ const { v4: uuidv4 } = require('uuid');
 const DesignModel = require('../models/design.model');
 const brandKitService = require('./brandKit.service');
 const { generateDesignContent } = require('./ai.service');
-const { renderHtmlToPng } = require('./renderer.service');
 const { uploadFile, deleteFile } = require('./storage.service');
 const { buildDesignHtml } = require('../templates/design.template');
 const ApiError = require('../utils/ApiError');
@@ -40,6 +39,7 @@ async function generateDesign(userId, { brandKitId, prompt, platform }) {
     const html = buildDesignHtml({ brandKit, content });
 
     const renderStart = Date.now();
+    const { renderHtmlToPng } = require('./renderer.service');
     const pngBuffer = await renderHtmlToPng(html);
     const renderDurationMs = Date.now() - renderStart;
 

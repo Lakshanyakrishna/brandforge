@@ -25,10 +25,14 @@ const fileFormat = combine(
     json()
 );
 
-const logger = winston.createLogger({
-    level: config.isProduction ? 'info' : 'debug',
-    format: fileFormat,
-    transports: [
+const transports = [];
+
+if (process.env.VERCEL || !config.isProduction) {
+    transports.push(new winston.transports.Console({ format: consoleFormat }));
+}
+
+if (!process.env.VERCEL) {
+    transports.push(
         new winston.transports.File({
             filename: path.join(LOGS_DIR, 'error.log'),
             level: 'error'
@@ -36,14 +40,13 @@ const logger = winston.createLogger({
         new winston.transports.File({
             filename: path.join(LOGS_DIR, 'combined.log')
         })
-    ]
-});
-
-// Console output is dev-only by design: in production, stdout is usually
-// captured by the process manager/container anyway, and colorized text is
-// wasted noise compared to the structured file transports above.
-if (!config.isProduction) {
-    logger.add(new winston.transports.Console({ format: consoleFormat }));
+    );
 }
+
+const logger = winston.createLogger({
+    level: config.isProduction ? 'info' : 'debug',
+    format: config.isProduction ? consoleFormat : fileFormat,
+    transports
+});
 
 module.exports = logger;
