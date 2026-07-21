@@ -49,6 +49,10 @@ const config = {
 
     gemini: {
         apiKey: process.env.GEMINI_API_KEY
+    },
+
+    replicate: {
+        apiToken: process.env.REPLICATE_API_TOKEN
     }
 };
 
