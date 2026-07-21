@@ -34,5 +34,3 @@ const connectDB = async () => {
 }
 
 module.exports = { connectDB, isDbConnected };
-
-module.exports = connectDB;
