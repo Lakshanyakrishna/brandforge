@@ -46,7 +46,7 @@ export default function App() {
   const Page = PAGES[page];
 
   return (
-    <div className="md:flex min-h-screen bg-gray-50">
+    <div className="md:flex min-h-screen bg-background text-on-background">
       <Toaster position="top-center" toastOptions={{ style: { fontSize: '14px' } }} />
       <Sidebar
         page={page}
@@ -57,9 +57,9 @@ export default function App() {
       />
 
       <div className="flex-1 min-w-0">
-        <header className="md:hidden flex items-center justify-between px-4 h-14 border-b border-gray-100 bg-white sticky top-0 z-30">
-          <span className="font-semibold text-gray-900">BrandForge</span>
-          <button onClick={() => setMobileNavOpen(true)} className="text-gray-500 hover:text-gray-700">
+        <header className="md:hidden flex items-center justify-between px-4 h-14 border-b border-surface-variant bg-surface-container-low sticky top-0 z-30">
+          <span className="font-semibold text-on-background">BrandForge</span>
+          <button onClick={() => setMobileNavOpen(true)} className="text-on-surface-variant hover:text-on-surface">
             <Menu className="w-5 h-5" />
           </button>
         </header>

@@ -14,9 +14,6 @@ function formatDate(iso) {
 
 export default function Gallery({ navigate }) {
   const [designs, setDesigns] = useState(null);
-  // Design records only store a brandKit ID, not a populated name — this
-  // fetches brand kits alongside designs and joins them client-side rather
-  // than touching the backend's populate behavior.
   const [brandKitNames, setBrandKitNames] = useState({});
 
   function load() {
@@ -42,8 +39,8 @@ export default function Gallery({ navigate }) {
 
   return (
     <div>
-      <h1 className="text-2xl font-semibold text-gray-900 mb-1">Gallery</h1>
-      <p className="text-sm text-gray-500 mb-6">Every design you've generated, in one place.</p>
+      <h1 className="text-2xl font-semibold text-on-background mb-1">Gallery</h1>
+      <p className="text-sm text-on-surface-variant mb-6">Every design you've generated, in one place.</p>
 
       {designs === null ? (
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -68,8 +65,8 @@ export default function Gallery({ navigate }) {
                   )}
                   {design.platform && <Badge tone="gray">{design.platform}</Badge>}
                 </div>
-                <p className="text-sm text-gray-700 truncate mb-1">{design.prompt}</p>
-                <p className="text-xs text-gray-400 mb-3">{formatDate(design.createdAt)}</p>
+                <p className="text-sm text-on-surface truncate mb-1">{design.prompt}</p>
+                <p className="text-xs text-on-surface-variant mb-3">{formatDate(design.createdAt)}</p>
                 <div className="flex gap-2">
                   <a href={design.imageUrl} download target="_blank" rel="noreferrer" className="flex-1">
                     <Button variant="secondary" size="sm" icon={Download} className="w-full">Download</Button>

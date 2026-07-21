@@ -32,13 +32,13 @@ function Stepper({ step }) {
         <div key={label} className="flex items-center gap-2">
           <div
             className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-semibold shrink-0 ${
-              i < step ? 'bg-indigo-600 text-white' : i === step ? 'bg-indigo-100 text-indigo-700' : 'bg-gray-100 text-gray-400'
+              i < step ? 'bg-primary-container text-on-primary-container' : i === step ? 'bg-primary-container text-on-primary-container' : 'bg-surface-container text-on-surface-variant'
             }`}
           >
             {i < step ? <Check className="w-3.5 h-3.5" /> : i + 1}
           </div>
-          <span className={`text-sm ${i === step ? 'text-gray-900 font-medium' : 'text-gray-400'}`}>{label}</span>
-          {i < STEPS.length - 1 && <div className="w-8 h-px bg-gray-200 mx-1" />}
+          <span className={`text-sm ${i === step ? 'text-on-background font-medium' : 'text-on-surface-variant'}`}>{label}</span>
+          {i < STEPS.length - 1 && <div className="w-8 h-px bg-surface-variant mx-1" />}
         </div>
       ))}
     </div>
@@ -93,7 +93,7 @@ export default function GenerateDesign({ navigate }) {
   if (brandKits !== null && brandKits.length === 0) {
     return (
       <div>
-        <h1 className="text-2xl font-semibold text-gray-900 mb-6">Generate Design</h1>
+        <h1 className="text-2xl font-semibold text-on-background mb-6">Generate Design</h1>
         <EmptyState
           icon={Palette}
           title="You need a brand kit first"
@@ -106,8 +106,8 @@ export default function GenerateDesign({ navigate }) {
 
   return (
     <div>
-      <h1 className="text-2xl font-semibold text-gray-900 mb-1">Generate Design</h1>
-      <p className="text-sm text-gray-500 mb-6">Pick a brand kit, a platform, and describe what you want.</p>
+      <h1 className="text-2xl font-semibold text-on-background mb-1">Generate Design</h1>
+      <p className="text-sm text-on-surface-variant mb-6">Pick a brand kit, a platform, and describe what you want.</p>
 
       {!result && !loading && <Stepper step={step} />}
 
@@ -115,7 +115,7 @@ export default function GenerateDesign({ navigate }) {
         <div className="space-y-5 max-w-2xl">
           <Card title="1. Choose Brand Kit">
             {brandKits === null ? (
-              <p className="text-sm text-gray-400">Loading…</p>
+              <p className="text-sm text-on-surface-variant">Loading…</p>
             ) : (
               <div className="grid sm:grid-cols-2 gap-3">
                 {brandKits.map((kit) => (
@@ -124,15 +124,15 @@ export default function GenerateDesign({ navigate }) {
                     type="button"
                     onClick={() => setBrandKitId(kit._id)}
                     className={`flex items-center gap-3 p-3 rounded-xl border-2 text-left transition-colors duration-150 ${
-                      brandKitId === kit._id ? 'border-indigo-500 bg-indigo-50/40' : 'border-gray-100 hover:border-gray-200'
+                      brandKitId === kit._id ? 'border-primary bg-primary-container/20' : 'border-surface-variant hover:border-on-surface-variant'
                     }`}
                   >
                     <div className="flex -space-x-1 shrink-0">
-                      <span className="w-4 h-4 rounded-full border border-white" style={{ background: kit.colors.primary }} />
-                      <span className="w-4 h-4 rounded-full border border-white" style={{ background: kit.colors.secondary }} />
-                      <span className="w-4 h-4 rounded-full border border-white" style={{ background: kit.colors.accent }} />
+                      <span className="w-4 h-4 rounded-full border border-surface-container" style={{ background: kit.colors.primary }} />
+                      <span className="w-4 h-4 rounded-full border border-surface-container" style={{ background: kit.colors.secondary }} />
+                      <span className="w-4 h-4 rounded-full border border-surface-container" style={{ background: kit.colors.accent }} />
                     </div>
-                    <span className="text-sm font-medium text-gray-800 truncate">{kit.brandName}</span>
+                    <span className="text-sm font-medium text-on-surface truncate">{kit.brandName}</span>
                   </button>
                 ))}
               </div>
@@ -148,11 +148,11 @@ export default function GenerateDesign({ navigate }) {
                     type="button"
                     onClick={() => setPlatform(key)}
                     className={`flex flex-col items-center gap-2 p-4 rounded-xl border-2 transition-colors duration-150 ${
-                      platform === key ? 'border-indigo-500 bg-indigo-50/40' : 'border-gray-100 hover:border-gray-200'
+                      platform === key ? 'border-primary bg-primary-container/20' : 'border-surface-variant hover:border-on-surface-variant'
                     }`}
                   >
-                    <Icon className={`w-5 h-5 ${platform === key ? 'text-indigo-600' : 'text-gray-400'}`} />
-                    <span className="text-xs font-medium text-gray-700">{label}</span>
+                    <Icon className={`w-5 h-5 ${platform === key ? 'text-primary' : 'text-on-surface-variant'}`} />
+                    <span className="text-xs font-medium text-on-surface">{label}</span>
                   </button>
                 ))}
               </div>
@@ -174,7 +174,7 @@ export default function GenerateDesign({ navigate }) {
                       key={ex}
                       type="button"
                       onClick={() => setPrompt(ex)}
-                      className="text-xs px-2.5 py-1 rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors duration-150"
+                      className="text-xs px-2.5 py-1 rounded-full bg-surface-container text-on-surface-variant hover:bg-surface-container-high transition-colors duration-150"
                     >
                       {ex}
                     </button>
@@ -192,9 +192,9 @@ export default function GenerateDesign({ navigate }) {
       {loading && (
         <Card className="max-w-lg">
           <div className="flex flex-col items-center text-center py-8">
-            <div className="w-12 h-12 rounded-full border-4 border-indigo-100 border-t-indigo-600 animate-spin mb-5" />
-            <p className="text-sm font-medium text-gray-900">{progressMsg}</p>
-            <p className="text-xs text-gray-400 mt-1">This usually takes 10-20 seconds.</p>
+            <div className="w-12 h-12 rounded-full border-4 border-surface-variant border-t-primary animate-spin mb-5" />
+            <p className="text-sm font-medium text-on-background">{progressMsg}</p>
+            <p className="text-xs text-on-surface-variant mt-1">This usually takes 10-20 seconds.</p>
           </div>
         </Card>
       )}
@@ -202,9 +202,9 @@ export default function GenerateDesign({ navigate }) {
       {result && (
         <div className="max-w-lg">
           <Card>
-            <p className="text-xs font-medium text-gray-400 uppercase tracking-wide mb-1">Original Prompt</p>
-            <p className="text-sm text-gray-700 mb-4">{result.prompt}</p>
-            <img src={result.imageUrl} alt="Generated design" className="w-full rounded-xl border border-gray-100 mb-5" />
+            <p className="text-xs font-medium text-on-surface-variant uppercase tracking-wide mb-1">Original Prompt</p>
+            <p className="text-sm text-on-surface mb-4">{result.prompt}</p>
+            <img src={result.imageUrl} alt="Generated design" className="w-full rounded-xl border border-surface-variant mb-5" />
             <div className="flex gap-3">
               <a href={result.imageUrl} download target="_blank" rel="noreferrer" className="flex-1">
                 <Button icon={Download} className="w-full">Download</Button>

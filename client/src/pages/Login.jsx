@@ -28,17 +28,17 @@ export default function Login({ onLogin }) {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+    <div className="min-h-screen flex items-center justify-center bg-background px-4">
       <div className="w-full max-w-sm">
         <div className="flex flex-col items-center mb-8">
-          <div className="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center mb-3">
-            <Sparkles className="w-5 h-5 text-white" />
+          <div className="w-10 h-10 rounded-xl bg-primary-container flex items-center justify-center mb-3">
+            <Sparkles className="w-5 h-5 text-on-primary-container" />
           </div>
-          <h1 className="text-xl font-semibold text-gray-900">BrandForge</h1>
-          <p className="text-sm text-gray-500 mt-1">On-brand social designs, generated instantly.</p>
+          <h1 className="text-xl font-semibold text-on-background">BrandForge</h1>
+          <p className="text-sm text-on-surface-variant mt-1">On-brand social designs, generated instantly.</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 space-y-4">
+        <form onSubmit={handleSubmit} className="bg-surface-container-low rounded-2xl border border-surface-variant p-6 space-y-4">
           <Field label="Username">
             <Input
               placeholder="e.g. alice"
@@ -59,7 +59,7 @@ export default function Login({ onLogin }) {
             />
           </Field>
 
-          {error && <p className="text-sm text-red-600">{error}</p>}
+          {error && <p className="text-sm text-error">{error}</p>}
 
           <Button type="submit" loading={loading} className="w-full" size="lg">
             {mode === 'login' ? 'Log In' : 'Create Account'}
@@ -71,7 +71,7 @@ export default function Login({ onLogin }) {
               setMode(mode === 'login' ? 'register' : 'login');
               setError('');
             }}
-            className="w-full text-sm text-indigo-600 hover:text-indigo-700 font-medium"
+            className="w-full text-sm text-primary hover:text-primary font-medium"
           >
             {mode === 'login' ? "Need an account? Register" : 'Already have an account? Log in'}
           </button>
