@@ -14,20 +14,25 @@ const createBrandKitValidator = [
         .isLength({ min: 2, max: 60 }).withMessage('Brand name must be between 2 and 60 characters'),
 
     body('primaryColor')
+        .optional({ values: 'null' })
         .trim()
         .matches(HEX_COLOR_REGEX).withMessage(hexColorMessage('Primary color')),
     body('secondaryColor')
+        .optional({ values: 'null' })
         .trim()
         .matches(HEX_COLOR_REGEX).withMessage(hexColorMessage('Secondary color')),
     body('accentColor')
+        .optional({ values: 'null' })
         .trim()
         .matches(HEX_COLOR_REGEX).withMessage(hexColorMessage('Accent color')),
 
     body('headingFont')
+        .optional({ values: 'null' })
         .trim()
         .notEmpty().withMessage('Heading font is required')
         .isLength({ max: 60 }).withMessage('Heading font name is too long'),
     body('bodyFont')
+        .optional({ values: 'null' })
         .trim()
         .notEmpty().withMessage('Body font is required')
         .isLength({ max: 60 }).withMessage('Body font name is too long'),
@@ -35,7 +40,20 @@ const createBrandKitValidator = [
     body('toneOfVoice')
         .trim()
         .notEmpty().withMessage('Tone of voice is required')
-        .isLength({ min: 3, max: 160 }).withMessage('Tone of voice must be between 3 and 160 characters')
+        .isLength({ min: 3, max: 160 }).withMessage('Tone of voice must be between 3 and 160 characters'),
+
+    body('mockupDevice')
+        .optional()
+        .trim()
+        .isIn(['none', 'iphone', 'android', 'desktop', 'tablet']).withMessage('Invalid mockup device'),
+    body('mockupBackground')
+        .optional()
+        .trim()
+        .matches(HEX_COLOR_REGEX).withMessage(hexColorMessage('Mockup background')),
+    body('mockupShadow')
+        .optional()
+        .isBoolean().withMessage('Mockup shadow must be true or false')
+        .toBoolean()
 ];
 
 const updateBrandKitValidator = [
@@ -71,7 +89,20 @@ const updateBrandKitValidator = [
     body('toneOfVoice')
         .optional()
         .trim()
-        .isLength({ min: 3, max: 160 }).withMessage('Tone of voice must be between 3 and 160 characters')
+        .isLength({ min: 3, max: 160 }).withMessage('Tone of voice must be between 3 and 160 characters'),
+
+    body('mockupDevice')
+        .optional()
+        .trim()
+        .isIn(['none', 'iphone', 'android', 'desktop', 'tablet']).withMessage('Invalid mockup device'),
+    body('mockupBackground')
+        .optional()
+        .trim()
+        .matches(HEX_COLOR_REGEX).withMessage(hexColorMessage('Mockup background')),
+    body('mockupShadow')
+        .optional()
+        .trim()
+        .isIn(['true', 'false']).withMessage('Mockup shadow must be true or false')
 ];
 
 const idParamValidator = [
