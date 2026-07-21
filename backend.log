@@ -1,0 +1,67 @@
+
+> socialmedia@1.0.0 dev
+> nodemon server.js
+
+[33m[nodemon] 3.1.11[39m
+[33m[nodemon] to restart at any time, enter `rs`[39m
+[33m[nodemon] watching path(s): *.*[39m
+[33m[nodemon] watching extensions: js,mjs,cjs,json[39m
+[32m[nodemon] starting `node server.js`[39m
+[dotenv@17.2.3] injecting env (9) from .env -- tip: ⚙️  specify custom .env file path with { path: '/custom/path/.env' }
+2026-07-04 15:16:56 [[32minfo[39m]: Connected to MongoDB
+2026-07-04 15:16:56 [[32minfo[39m]: Server is running on port 5050
+ValidationError: The 'X-Forwarded-For' header is set but the Express 'trust proxy' setting is false (default). This could indicate a misconfiguration which would prevent express-rate-limit from accurately identifying users. See https://express-rate-limit.github.io/ERR_ERL_UNEXPECTED_X_FORWARDED_FOR/ for more information.
+    at Object.xForwardedForHeader (/Users/nishithakrishna/Desktop/projects/untitled folder/Social-media/node_modules/express-rate-limit/dist/index.cjs:381:13)
+    at wrappedValidations.<computed> [as xForwardedForHeader] (/Users/nishithakrishna/Desktop/projects/untitled folder/Social-media/node_modules/express-rate-limit/dist/index.cjs:704:22)
+    at Object.keyGenerator (/Users/nishithakrishna/Desktop/projects/untitled folder/Social-media/node_modules/express-rate-limit/dist/index.cjs:811:20)
+    at /Users/nishithakrishna/Desktop/projects/untitled folder/Social-media/node_modules/express-rate-limit/dist/index.cjs:893:32
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async /Users/nishithakrishna/Desktop/projects/untitled folder/Social-media/node_modules/express-rate-limit/dist/index.cjs:854:5 {
+  code: 'ERR_ERL_UNEXPECTED_X_FORWARDED_FOR',
+  help: 'https://express-rate-limit.github.io/ERR_ERL_UNEXPECTED_X_FORWARDED_FOR/'
+}
+2026-07-04 15:24:33 [[32minfo[39m]: [0mGET /api/brandkits [36m304[0m 22.750 ms - -[0m
+2026-07-04 15:24:33 [[32minfo[39m]: [0mGET /api/designs [36m304[0m 56.155 ms - -[0m
+2026-07-04 15:24:34 [[32minfo[39m]: [0mGET /api/designs [36m304[0m 11.458 ms - -[0m
+2026-07-04 15:24:34 [[32minfo[39m]: [0mGET /api/brandkits [36m304[0m 5.706 ms - -[0m
+2026-07-04 15:35:57 [[32minfo[39m]: [0mGET /api/brandkits [36m304[0m 22.871 ms - -[0m
+2026-07-04 15:35:57 [[32minfo[39m]: [0mGET /api/designs [36m304[0m 5.040 ms - -[0m
+2026-07-04 15:35:58 [[32minfo[39m]: [0mGET /api/brandkits [36m304[0m 9.335 ms - -[0m
+2026-07-04 15:35:58 [[32minfo[39m]: [0mGET /api/designs [36m304[0m 7.959 ms - -[0m
+2026-07-04 15:36:23 [[32minfo[39m]: [0mGET /api/designs [36m304[0m 19.800 ms - -[0m
+2026-07-04 15:36:23 [[32minfo[39m]: [0mGET /api/brandkits [36m304[0m 18.860 ms - -[0m
+2026-07-04 15:36:24 [[32minfo[39m]: [0mGET /api/brandkits [36m304[0m 3.674 ms - -[0m
+2026-07-04 15:36:24 [[32minfo[39m]: [0mGET /api/designs [36m304[0m 2.499 ms - -[0m
+2026-07-04 15:55:26 [[32minfo[39m]: [0mGET /api/designs [36m304[0m 22.910 ms - -[0m
+2026-07-04 15:55:26 [[32minfo[39m]: [0mGET /api/brandkits [36m304[0m 15.346 ms - -[0m
+2026-07-04 15:55:27 [[32minfo[39m]: [0mGET /api/brandkits [36m304[0m 11.090 ms - -[0m
+2026-07-04 15:55:27 [[32minfo[39m]: [0mGET /api/designs [36m304[0m 8.601 ms - -[0m
+2026-07-04 15:58:16 [[32minfo[39m]: [0mGET /api/brandkits [32m200[0m 51.592 ms - 540[0m
+2026-07-04 15:58:17 [[32minfo[39m]: [0mGET /api/brandkits [36m304[0m 5.814 ms - -[0m
+2026-07-04 16:00:00 [[32minfo[39m]: [0mGET /api/brandkits [36m304[0m 33.050 ms - -[0m
+2026-07-04 16:00:00 [[32minfo[39m]: [0mGET /api/designs [36m304[0m 9.662 ms - -[0m
+2026-07-04 16:00:01 [[32minfo[39m]: [0mGET /api/brandkits [36m304[0m 9.236 ms - -[0m
+2026-07-04 16:00:01 [[32minfo[39m]: [0mGET /api/designs [36m304[0m 3.856 ms - -[0m
+2026-07-04 16:00:03 [[32minfo[39m]: [0mGET /api/brandkits [36m304[0m 8.904 ms - -[0m
+2026-07-04 16:00:04 [[32minfo[39m]: [0mGET /api/brandkits [36m304[0m 4.296 ms - -[0m
+2026-07-04 16:00:07 [[32minfo[39m]: [0mGET /api/brandkits [36m304[0m 10.248 ms - -[0m
+2026-07-04 16:00:07 [[32minfo[39m]: [0mGET /api/brandkits [36m304[0m 5.335 ms - -[0m
+2026-07-04 16:00:47 [[32minfo[39m]: [0mGET /api/brandkits [36m304[0m 10.433 ms - -[0m
+2026-07-04 16:00:48 [[32minfo[39m]: [0mGET /api/brandkits [36m304[0m 10.542 ms - -[0m
+2026-07-04 16:01:10 [[32minfo[39m]: [0mPOST /api/generate [32m201[0m 10911.656 ms - 2480[0m
+2026-07-04 16:01:35 [[32minfo[39m]: [0mGET /api/brandkits [36m304[0m 14.882 ms - -[0m
+2026-07-04 16:01:35 [[32minfo[39m]: [0mGET /api/designs [32m200[0m 12.544 ms - 686[0m
+2026-07-04 16:01:35 [[32minfo[39m]: [0mGET /api/brandkits [36m304[0m 5.830 ms - -[0m
+2026-07-04 16:01:36 [[32minfo[39m]: [0mGET /api/designs [36m304[0m 4.352 ms - -[0m
+2026-07-04 16:03:12 [[32minfo[39m]: [0mGET /api/brandkits [36m304[0m 32.734 ms - -[0m
+2026-07-04 16:03:13 [[32minfo[39m]: [0mGET /api/brandkits [36m304[0m 10.867 ms - -[0m
+2026-07-04 16:04:23 [[32minfo[39m]: [0mPOST /api/brandkits [32m201[0m 2796.615 ms - 571[0m
+2026-07-04 16:04:24 [[32minfo[39m]: [0mGET /api/brandkits [32m200[0m 15.271 ms - 988[0m
+2026-07-04 16:04:32 [[32minfo[39m]: [0mGET /api/brandkits [36m304[0m 25.043 ms - -[0m
+2026-07-04 16:04:33 [[32minfo[39m]: [0mGET /api/brandkits [36m304[0m 9.534 ms - -[0m
+2026-07-04 16:04:49 [[32minfo[39m]: [0mGET /api/brandkits [36m304[0m 21.463 ms - -[0m
+2026-07-04 16:04:49 [[32minfo[39m]: [0mGET /api/designs [36m304[0m 12.278 ms - -[0m
+2026-07-04 16:04:50 [[32minfo[39m]: [0mGET /api/designs [36m304[0m 5.091 ms - -[0m
+2026-07-04 16:04:50 [[32minfo[39m]: [0mGET /api/brandkits [36m304[0m 5.011 ms - -[0m
+2026-07-04 16:04:55 [[32minfo[39m]: [0mGET /api/brandkits [36m304[0m 12.090 ms - -[0m
+2026-07-04 16:04:56 [[32minfo[39m]: [0mGET /api/brandkits [36m304[0m 8.726 ms - -[0m
