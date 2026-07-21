@@ -2,7 +2,7 @@
   "services": {
     "brandforge": {
       "root": ".",
-      "entrypoint": "server.js"
+      "entrypoint": "api/index.js"
     }
   },
   "rewrites": [
