@@ -1,4 +1,4 @@
-const express = require('express');
-const app = express();
-app.get('*', (req, res) => res.send('Hello from Vercel!'));
+const { connectDB } = require('../src/db/db');
+const app = require('../src/app');
+connectDB();
 module.exports = app;
