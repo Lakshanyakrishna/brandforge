@@ -10,25 +10,29 @@ const LOGO_FOLDER = 'brandforge/logos';
 // shape the BrandKit schema stores (colors/fonts as sub-objects), which is
 // also the shape Stage 2's colorAssignments ("primary"/"secondary"/"accent")
 // will read from directly during rendering.
-function buildBrandKitFields({ brandName, primaryColor, secondaryColor, accentColor, headingFont, bodyFont, toneOfVoice }) {
+function buildBrandKitFields({ brandName, primaryColor, secondaryColor, accentColor, headingFont, bodyFont, toneOfVoice, mockupDevice, mockupBackground, mockupShadow, logoUrl }) {
     const fields = {};
 
     if (brandName !== undefined) fields.brandName = brandName;
     if (toneOfVoice !== undefined) fields.toneOfVoice = toneOfVoice;
+    if (logoUrl !== undefined) fields.logoUrl = logoUrl;
 
-    if (primaryColor !== undefined || secondaryColor !== undefined || accentColor !== undefined) {
-        fields.colors = {
-            ...(primaryColor !== undefined && { primary: primaryColor }),
-            ...(secondaryColor !== undefined && { secondary: secondaryColor }),
-            ...(accentColor !== undefined && { accent: accentColor })
-        };
-    }
+    fields.colors = {
+        primary: primaryColor || '#0F172A',
+        secondary: secondaryColor || '#2563EB',
+        accent: accentColor || '#38BDF8'
+    };
 
-    if (headingFont !== undefined || bodyFont !== undefined) {
-        fields.fonts = {
-            ...(headingFont !== undefined && { heading: headingFont }),
-            ...(bodyFont !== undefined && { body: bodyFont })
-        };
+    fields.fonts = {
+        heading: headingFont || 'Poppins',
+        body: bodyFont || 'Inter'
+    };
+
+    if (mockupDevice !== undefined || mockupBackground !== undefined || mockupShadow !== undefined) {
+        fields.mockup = {};
+        if (mockupDevice !== undefined) fields.mockup.device = mockupDevice;
+        if (mockupBackground !== undefined) fields.mockup.background = mockupBackground;
+        if (mockupShadow !== undefined) fields.mockup.shadow = mockupShadow;
     }
 
     return fields;
@@ -78,6 +82,9 @@ async function updateBrandKit(brandKitId, userId, formFields, logoFile) {
     }
     if (fields.fonts) {
         fields.fonts = { ...brandKit.fonts.toObject(), ...fields.fonts };
+    }
+    if (fields.mockup) {
+        fields.mockup = { ...brandKit.mockup.toObject(), ...fields.mockup };
     }
 
     if (logoFile) {
