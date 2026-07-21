@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { HexColorPicker } from 'react-colorful';
 import toast from 'react-hot-toast';
-import { UploadCloud, X, Pencil, Trash2, Palette, Type as TypeIcon, MessageSquare, Sparkles } from 'lucide-react';
+import { UploadCloud, X, Pencil, Trash2, Palette, Type as TypeIcon, MessageSquare, Sparkles, Smartphone, Monitor, Tablet, Sun, RefreshCw } from 'lucide-react';
 import api from '../api';
 import Card from '../components/Card';
 import Button from '../components/Button';
@@ -12,8 +12,7 @@ import FontPicker from '../components/FontPicker';
 import BrandPreviewCard from '../components/BrandPreviewCard';
 import { PRESET_PALETTES } from '../lib/palettes';
 import { ensureGoogleFontsLoaded } from '../lib/fonts';
-import { extractPaletteFromFile } from '../lib/extractColors';
-
+import { INDUSTRIES } from '../lib/industries';
 const DEFAULT_COLORS = { primary: '#0F172A', secondary: '#2563EB', accent: '#38BDF8' };
 const DEFAULT_FONTS = { heading: 'Poppins', body: 'Inter' };
 const TONE_SUGGESTIONS = [
@@ -28,15 +27,14 @@ const emptyForm = () => ({
   colors: { ...DEFAULT_COLORS },
   fonts: { ...DEFAULT_FONTS },
   toneOfVoice: '',
+  mockup: { device: 'none', background: '#FFFFFF', shadow: true },
 });
 
 export default function BrandKit() {
   const [brandKits, setBrandKits] = useState(null);
   const [form, setForm] = useState(emptyForm);
-  const [logoFile, setLogoFile] = useState(null);
   const [logoPreviewUrl, setLogoPreviewUrl] = useState(null);
-  const [extractedColors, setExtractedColors] = useState(null);
-  const [extracting, setExtracting] = useState(false);
+  const [generatingLogo, setGeneratingLogo] = useState(false);
   const [activeSlot, setActiveSlot] = useState('primary');
   const [editingId, setEditingId] = useState(null);
   const [submitting, setSubmitting] = useState(false);
@@ -50,27 +48,38 @@ export default function BrandKit() {
     api.get('/brandkits').then((res) => setBrandKits(res.data.data)).catch(() => setBrandKits([]));
   }
 
-  async function handleLogoChange(e) {
-    const file = e.target.files[0];
-    if (!file) return;
-    setLogoFile(file);
-    setLogoPreviewUrl(URL.createObjectURL(file));
-    setExtractedColors(null);
-    setExtracting(true);
+  const [logoDescription, setLogoDescription] = useState('');
+  const [logoIndustry, setLogoIndustry] = useState('food');
+
+  async function handleGenerateLogo() {
+    if (!form.brandName.trim()) {
+      toast.error('Enter a brand name first');
+      return;
+    }
+    setGeneratingLogo(true);
     try {
-      const palette = await extractPaletteFromFile(file, 5);
-      setExtractedColors(palette);
-    } catch {
-      // Extraction is a nice-to-have; a failure just means no suggestions.
+      const res = await api.post('/brandkits/generate-logo', {
+        brandName: form.brandName,
+        toneOfVoice: form.toneOfVoice || 'Professional and trustworthy',
+        primaryColor: form.colors.primary,
+        secondaryColor: form.colors.secondary,
+        accentColor: form.colors.accent,
+        description: logoDescription,
+        industry: logoIndustry,
+      });
+      setLogoPreviewUrl(res.data.data.url);
+      toast.success('Logo generated!');
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Failed to generate logo');
     } finally {
-      setExtracting(false);
+      setGeneratingLogo(false);
     }
   }
 
   function removeLogo() {
-    setLogoFile(null);
     setLogoPreviewUrl(null);
-    setExtractedColors(null);
+    setLogoDescription('');
+    setLogoIndustry('food');
   }
 
   function applyPalette(palette) {
@@ -92,10 +101,9 @@ export default function BrandKit() {
       colors: { ...kit.colors },
       fonts: { ...kit.fonts },
       toneOfVoice: kit.toneOfVoice,
+      mockup: kit.mockup || { device: 'none', background: '#FFFFFF', shadow: true },
     });
-    setLogoFile(null);
     setLogoPreviewUrl(kit.logoUrl || null);
-    setExtractedColors(null);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
@@ -114,21 +122,25 @@ export default function BrandKit() {
 
     setSubmitting(true);
     try {
-      const data = new FormData();
-      data.append('brandName', form.brandName);
-      data.append('primaryColor', form.colors.primary);
-      data.append('secondaryColor', form.colors.secondary);
-      data.append('accentColor', form.colors.accent);
-      data.append('headingFont', form.fonts.heading);
-      data.append('bodyFont', form.fonts.body);
-      data.append('toneOfVoice', form.toneOfVoice);
-      if (logoFile) data.append('logo', logoFile);
+      const data = {
+        brandName: form.brandName,
+        primaryColor: form.colors.primary,
+        secondaryColor: form.colors.secondary,
+        accentColor: form.colors.accent,
+        headingFont: form.fonts.heading,
+        bodyFont: form.fonts.body,
+        toneOfVoice: form.toneOfVoice,
+        mockupDevice: form.mockup.device,
+        mockupBackground: form.mockup.background,
+        mockupShadow: form.mockup.shadow,
+      };
+      if (logoPreviewUrl) data.logoUrl = logoPreviewUrl;
 
       if (editingId) {
-        await api.put(`/brandkits/${editingId}`, data, { headers: { 'Content-Type': 'multipart/form-data' } });
+        await api.put(`/brandkits/${editingId}`, data);
         toast.success('Brand kit updated');
       } else {
-        await api.post('/brandkits', data, { headers: { 'Content-Type': 'multipart/form-data' } });
+        await api.post('/brandkits', data);
         toast.success('Brand kit created');
       }
       cancelEdit();
@@ -155,8 +167,8 @@ export default function BrandKit() {
 
   return (
     <div>
-      <h1 className="text-2xl font-semibold text-gray-900 mb-1">Brand Kits</h1>
-      <p className="text-sm text-gray-500 mb-6">
+      <h1 className="text-2xl font-semibold text-on-background mb-1">Brand Kits</h1>
+      <p className="text-sm text-on-surface-variant mb-6">
         Define your colors, fonts, and voice once — every generated design will stay on-brand.
       </p>
 
@@ -173,27 +185,57 @@ export default function BrandKit() {
             </Field>
           </Card>
 
-          <Card title="Logo" description="Upload a logo to get color suggestions automatically.">
+          <Card title="Logo" description="Describe the logo you want and let AI generate it.">
             {logoPreviewUrl ? (
               <div className="flex items-center gap-4">
-                <img src={logoPreviewUrl} alt="Logo preview" className="w-16 h-16 rounded-xl object-contain border border-gray-100 bg-white" />
+                <img src={logoPreviewUrl} alt="Logo preview" className="w-16 h-16 rounded-xl object-contain border border-surface-variant bg-surface-container" />
                 <div className="flex-1">
-                  {extracting && <p className="text-xs text-gray-400">Extracting colors…</p>}
-                  {!extracting && extractedColors && (
-                    <p className="text-xs text-gray-500">Suggested colors ready below.</p>
-                  )}
+                  <p className="text-xs text-on-surface-variant">AI-generated logo</p>
                 </div>
+                <Button type="button" variant="ghost" size="sm" icon={RefreshCw} onClick={handleGenerateLogo} loading={generatingLogo}>
+                  Regenerate
+                </Button>
                 <Button type="button" variant="ghost" size="sm" icon={X} onClick={removeLogo}>
                   Remove
                 </Button>
               </div>
             ) : (
-              <label className="flex flex-col items-center justify-center gap-2 border border-dashed border-gray-200 rounded-xl py-8 cursor-pointer hover:border-indigo-300 hover:bg-indigo-50/30 transition-colors duration-150">
-                <UploadCloud className="w-6 h-6 text-gray-400" />
-                <span className="text-sm text-gray-500">Click to upload a logo</span>
-                <span className="text-xs text-gray-400">PNG or JPG, up to 5MB</span>
-                <input type="file" accept="image/*" onChange={handleLogoChange} className="hidden" />
-              </label>
+              <div className="space-y-4">
+                <Field label="Industry">
+                  <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
+                    {INDUSTRIES.map((ind) => (
+                      <button
+                        key={ind.value}
+                        type="button"
+                        onClick={() => setLogoIndustry(ind.value)}
+                        className={`flex flex-col items-center gap-1 p-2 rounded-lg border-2 text-center transition-colors duration-150 ${
+                          logoIndustry === ind.value ? 'border-primary bg-primary-container/20' : 'border-surface-variant hover:border-on-surface-variant'
+                        }`}
+                      >
+                        <span className="text-lg">{ind.icon}</span>
+                        <span className="text-[10px] font-medium text-on-surface leading-tight">{ind.label}</span>
+                      </button>
+                    ))}
+                  </div>
+                </Field>
+                <Field label="Description (optional)">
+                  <Textarea
+                    rows={2}
+                    placeholder="e.g. A mountain peak with a rising sun, minimalist style"
+                    value={logoDescription}
+                    onChange={(e) => setLogoDescription(e.target.value)}
+                  />
+                </Field>
+                <div className="flex flex-col items-center gap-3 rounded-xl py-4 border border-dashed border-surface-variant">
+                  <UploadCloud className="w-8 h-8 text-on-surface-variant" />
+                  <p className="text-sm text-on-surface-variant text-center max-w-xs">
+                    Generate a unique logo for <span className="font-semibold text-on-surface">{form.brandName || 'your brand'}</span>.
+                  </p>
+                  <Button type="button" icon={Sparkles} onClick={handleGenerateLogo} loading={generatingLogo}>
+                    Generate Logo
+                  </Button>
+                </div>
+              </div>
             )}
           </Card>
 
@@ -205,57 +247,37 @@ export default function BrandKit() {
                   type="button"
                   onClick={() => setActiveSlot(slot)}
                   className={`rounded-xl border-2 p-2.5 text-left transition-colors duration-150 ${
-                    activeSlot === slot ? 'border-indigo-500' : 'border-gray-100 hover:border-gray-200'
+                    activeSlot === slot ? 'border-primary' : 'border-surface-variant hover:border-on-surface-variant'
                   }`}
                 >
                   <div className="w-full h-9 rounded-lg mb-2" style={{ background: form.colors[slot] }} />
-                  <p className="text-xs font-medium text-gray-600 capitalize">{slot}</p>
-                  <p className="text-[11px] text-gray-400 uppercase">{form.colors[slot]}</p>
+                  <p className="text-xs font-medium text-on-surface capitalize">{slot}</p>
+                  <p className="text-[11px] text-on-surface-variant uppercase">{form.colors[slot]}</p>
                 </button>
               ))}
             </div>
 
-            <p className="text-xs font-medium text-gray-500 mb-2">Presets</p>
+            <p className="text-xs font-medium text-on-surface-variant mb-2">Presets</p>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 mb-5">
               {PRESET_PALETTES.map((p) => (
                 <button
                   key={p.name}
                   type="button"
                   onClick={() => applyPalette(p)}
-                  className="flex items-center gap-2 px-2.5 py-2 rounded-lg border border-gray-100 hover:border-gray-300 transition-colors duration-150"
+                  className="flex items-center gap-2 px-2.5 py-2 rounded-lg border border-surface-variant hover:border-on-surface-variant transition-colors duration-150"
                 >
                   <span className="flex -space-x-1 shrink-0">
-                    <span className="w-3.5 h-3.5 rounded-full border border-white" style={{ background: p.primary }} />
-                    <span className="w-3.5 h-3.5 rounded-full border border-white" style={{ background: p.secondary }} />
-                    <span className="w-3.5 h-3.5 rounded-full border border-white" style={{ background: p.accent }} />
+                    <span className="w-3.5 h-3.5 rounded-full border border-surface-container" style={{ background: p.primary }} />
+                    <span className="w-3.5 h-3.5 rounded-full border border-surface-container" style={{ background: p.secondary }} />
+                    <span className="w-3.5 h-3.5 rounded-full border border-surface-container" style={{ background: p.accent }} />
                   </span>
-                  <span className="text-xs text-gray-600 truncate">{p.name}</span>
+                  <span className="text-xs text-on-surface truncate">{p.name}</span>
                 </button>
               ))}
             </div>
 
-            {extractedColors && (
-              <div className="mb-5">
-                <p className="text-xs font-medium text-gray-500 mb-2">
-                  Suggested from your logo — click to set <span className="capitalize font-semibold">{activeSlot}</span>
-                </p>
-                <div className="flex gap-2">
-                  {extractedColors.map((hex) => (
-                    <button
-                      key={hex}
-                      type="button"
-                      title={hex}
-                      onClick={() => setSlotColor(hex)}
-                      className="w-8 h-8 rounded-full border border-gray-200 hover:scale-110 transition-transform duration-150"
-                      style={{ background: hex }}
-                    />
-                  ))}
-                </div>
-              </div>
-            )}
-
             <div>
-              <p className="text-xs font-medium text-gray-500 mb-2">
+              <p className="text-xs font-medium text-on-surface-variant mb-2">
                 Custom — editing <span className="capitalize font-semibold">{activeSlot}</span>
               </p>
               <HexColorPicker
@@ -286,6 +308,68 @@ export default function BrandKit() {
             </div>
           </Card>
 
+          <Card title="Mockup" description="Choose how your designs are presented.">
+            <div className="space-y-4">
+              <div>
+                <p className="text-xs font-medium text-on-surface-variant mb-2">Device Frame</p>
+                <div className="grid grid-cols-5 gap-2">
+                  {[
+                    { key: 'none', label: 'None', icon: UploadCloud },
+                    { key: 'iphone', label: 'iPhone', icon: Smartphone },
+                    { key: 'android', label: 'Android', icon: Smartphone },
+                    { key: 'desktop', label: 'Desktop', icon: Monitor },
+                    { key: 'tablet', label: 'Tablet', icon: Tablet },
+                  ].map(({ key, label, icon: Icon }) => (
+                    <button
+                      key={key}
+                      type="button"
+                      onClick={() => setForm((f) => ({ ...f, mockup: { ...f.mockup, device: key } }))}
+                      className={`flex flex-col items-center gap-1.5 p-3 rounded-xl border-2 transition-colors duration-150 ${
+                        form.mockup.device === key ? 'border-primary bg-primary-container/20' : 'border-surface-variant hover:border-on-surface-variant'
+                      }`}
+                    >
+                      <Icon className={`w-5 h-5 ${form.mockup.device === key ? 'text-primary' : 'text-on-surface-variant'}`} />
+                      <span className="text-[11px] font-medium text-on-surface">{label}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <p className="text-xs font-medium text-on-surface-variant mb-2">Background Color</p>
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="color"
+                      value={form.mockup.background}
+                      onChange={(e) => setForm((f) => ({ ...f, mockup: { ...f.mockup, background: e.target.value } }))}
+                      className="w-10 h-10 rounded-lg border border-surface-variant cursor-pointer bg-transparent"
+                    />
+                    <Input
+                      className="font-mono uppercase"
+                      value={form.mockup.background}
+                      onChange={(e) => setForm((f) => ({ ...f, mockup: { ...f.mockup, background: e.target.value } }))}
+                    />
+                  </div>
+                </div>
+                <div>
+                  <p className="text-xs font-medium text-on-surface-variant mb-2">Shadow</p>
+                  <div className="flex items-center gap-3 h-10">
+                    <button
+                      type="button"
+                      onClick={() => setForm((f) => ({ ...f, mockup: { ...f.mockup, shadow: !f.mockup.shadow } }))}
+                      className={`flex items-center gap-2 px-3 py-2 rounded-lg border-2 transition-colors duration-150 ${
+                        form.mockup.shadow ? 'border-primary bg-primary-container/20' : 'border-surface-variant'
+                      }`}
+                    >
+                      <Sun className={`w-4 h-4 ${form.mockup.shadow ? 'text-primary' : 'text-on-surface-variant'}`} />
+                      <span className="text-xs font-medium text-on-surface">{form.mockup.shadow ? 'On' : 'Off'}</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </Card>
+
           <Card title="Tone of Voice">
             <Textarea
               rows={3}
@@ -300,7 +384,7 @@ export default function BrandKit() {
                   key={t}
                   type="button"
                   onClick={() => setForm((f) => ({ ...f, toneOfVoice: t }))}
-                  className="text-xs px-2.5 py-1 rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors duration-150"
+                  className="text-xs px-2.5 py-1 rounded-full bg-surface-container text-on-surface-variant hover:bg-surface-container-high transition-colors duration-150"
                 >
                   {t}
                 </button>
@@ -326,10 +410,11 @@ export default function BrandKit() {
           fonts={form.fonts}
           logoPreviewUrl={logoPreviewUrl}
           toneOfVoice={form.toneOfVoice}
+          mockup={form.mockup}
         />
       </div>
 
-      <h2 className="text-lg font-semibold text-gray-900 mb-4">Your Brand Kits</h2>
+      <h2 className="text-lg font-semibold text-on-background mb-4">Your Brand Kits</h2>
       {brandKits === null ? (
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {[1, 2, 3].map((i) => (
@@ -349,35 +434,35 @@ export default function BrandKit() {
               <div className="p-5">
                 <div className="flex items-center gap-3 mb-3">
                   {kit.logoUrl ? (
-                    <img src={kit.logoUrl} alt={kit.brandName} className="w-10 h-10 rounded-lg object-contain border border-gray-100" />
+                    <img src={kit.logoUrl} alt={kit.brandName} className="w-10 h-10 rounded-lg object-contain border border-surface-variant" />
                   ) : (
                     <div className="flex -space-x-1">
-                      <span className="w-4 h-4 rounded-full border border-white" style={{ background: kit.colors.primary }} />
-                      <span className="w-4 h-4 rounded-full border border-white" style={{ background: kit.colors.secondary }} />
-                      <span className="w-4 h-4 rounded-full border border-white" style={{ background: kit.colors.accent }} />
+                      <span className="w-4 h-4 rounded-full border border-surface-container" style={{ background: kit.colors.primary }} />
+                      <span className="w-4 h-4 rounded-full border border-surface-container" style={{ background: kit.colors.secondary }} />
+                      <span className="w-4 h-4 rounded-full border border-surface-container" style={{ background: kit.colors.accent }} />
                     </div>
                   )}
                   <div className="min-w-0">
-                    <p className="font-semibold text-gray-900 truncate">{kit.brandName}</p>
-                    <p className="text-xs text-gray-400 truncate flex items-center gap-1">
+                    <p className="font-semibold text-on-background truncate">{kit.brandName}</p>
+                    <p className="text-xs text-on-surface-variant truncate flex items-center gap-1">
                       <TypeIcon className="w-3 h-3" /> {kit.fonts.heading} / {kit.fonts.body}
                     </p>
                   </div>
                 </div>
-                <p className="text-xs text-gray-500 flex items-start gap-1 line-clamp-2">
+                <p className="text-xs text-on-surface-variant flex items-start gap-1 line-clamp-2">
                   <MessageSquare className="w-3 h-3 mt-0.5 shrink-0" /> {kit.toneOfVoice}
                 </p>
               </div>
-              <div className="flex border-t border-gray-100">
+              <div className="flex border-t border-surface-variant">
                 <button
                   onClick={() => startEdit(kit)}
-                  className="flex-1 flex items-center justify-center gap-1.5 text-xs font-medium text-gray-600 hover:bg-gray-50 py-2.5 transition-colors duration-150"
+                  className="flex-1 flex items-center justify-center gap-1.5 text-xs font-medium text-on-surface-variant hover:bg-surface-container py-2.5 transition-colors duration-150"
                 >
                   <Pencil className="w-3.5 h-3.5" /> Edit
                 </button>
                 <button
                   onClick={() => handleDelete(kit._id)}
-                  className="flex-1 flex items-center justify-center gap-1.5 text-xs font-medium text-red-600 hover:bg-red-50 py-2.5 transition-colors duration-150 border-l border-gray-100"
+                  className="flex-1 flex items-center justify-center gap-1.5 text-xs font-medium text-error hover:bg-surface-container py-2.5 transition-colors duration-150 border-l border-surface-variant"
                 >
                   <Trash2 className="w-3.5 h-3.5" /> Delete
                 </button>
