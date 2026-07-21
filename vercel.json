@@ -1,0 +1,11 @@
+{
+  "services": {
+    "brandforge": {
+      "root": ".",
+      "entrypoint": "server.js"
+    }
+  },
+  "rewrites": [
+    { "source": "/(.*)", "destination": { "type": "service", "service": "brandforge" } }
+  ]
+}
