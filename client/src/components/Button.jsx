@@ -1,10 +1,10 @@
 import { Loader2 } from 'lucide-react';
 
 const VARIANTS = {
-  primary: 'bg-indigo-600 text-white hover:bg-indigo-700 disabled:bg-indigo-300',
-  secondary: 'bg-white text-gray-700 border border-gray-200 hover:bg-gray-50 disabled:text-gray-400',
-  ghost: 'text-gray-600 hover:bg-gray-100 disabled:text-gray-300',
-  destructive: 'text-red-600 hover:bg-red-50 disabled:text-red-300',
+  primary: 'bg-primary-container text-on-primary-container hover:brightness-110 disabled:opacity-50',
+  secondary: 'bg-surface-container text-on-surface border border-surface-variant hover:bg-surface-container-high disabled:opacity-50',
+  ghost: 'text-on-surface-variant hover:bg-surface-container disabled:opacity-50',
+  destructive: 'text-error hover:bg-surface-container disabled:opacity-50',
 };
 
 const SIZES = {
@@ -13,9 +13,6 @@ const SIZES = {
   lg: 'text-base px-5 py-3 gap-2',
 };
 
-// One button implementation for the whole app so every primary/secondary/
-// destructive action looks and behaves consistently (hover, disabled,
-// loading states) instead of each page inventing its own className soup.
 export default function Button({
   variant = 'primary',
   size = 'md',
