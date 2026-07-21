@@ -55,6 +55,22 @@ const brandKitSchema = new mongoose.Schema(
             minlength: 3,
             maxlength: 160
         },
+        mockup: {
+            device: {
+                type: String,
+                enum: ['none', 'iphone', 'android', 'desktop', 'tablet'],
+                default: 'none'
+            },
+            background: {
+                type: String,
+                match: HEX_COLOR_REGEX,
+                default: '#FFFFFF'
+            },
+            shadow: {
+                type: Boolean,
+                default: true
+            }
+        },
         logoUrl: {
             type: String,
             default: null

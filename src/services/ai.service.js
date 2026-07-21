@@ -19,9 +19,6 @@ async function generateCaption(base64ImageFile, mimeType = "image/jpeg") {
   return result.response.text();
 }
 
-// Generates the structured copy for a social design. responseMimeType:
-// "application/json" puts Gemini in JSON mode so it reliably returns a raw
-// JSON object instead of prose or markdown-fenced JSON.
 async function generateDesignContent(prompt, toneOfVoice) {
   const model = genAI.getGenerativeModel({
     model: "gemini-2.5-flash",
@@ -38,4 +35,41 @@ Campaign prompt: "${prompt}"`;
   return result.response.text();
 }
 
-module.exports = { generateCaption, generateDesignContent };
+async function generateLogoDesign(brandName, toneOfVoice, colors, description, industry) {
+  const model = genAI.getGenerativeModel({
+    model: "gemini-2.5-flash",
+    generationConfig: { responseMimeType: "application/json" }
+  });
+
+  const instruction = `You are a professional logo designer. Design a typography-focused logo for the brand "${brandName}".
+
+Industry: ${industry || 'general'}
+Tone: "${toneOfVoice}"
+Colors: primary=${colors.primary}, secondary=${colors.secondary}, accent=${colors.accent}
+${description ? `Brief: "${description}"` : ''}
+
+Return ONLY a JSON object with these exact keys:
+{
+  "font": "one of: Playfair Display | Poppins | Inter | Montserrat | Space Grotesk | DM Sans | Plus Jakarta Sans | DM Serif Display | Outfit | Clash Display (if available)",
+  "style": "one of: minimal (thin weight, lowercase) | bold (heavy weight, clean) | elegant (serif, refined) | modern (sans-serif, geometric)",
+  "accent": "one of: underline (a colored line under text) | dot (a small circle accent) | double-line (two parallel lines) | none",
+  "letterSpacing": "tight (-0.02) or wide (0.08)",
+  "case": "uppercase or lowercase or title"
+}
+
+Pick the font and style that best fits the brand's industry and personality. Only return the raw JSON.`;
+
+  const result = await model.generateContent(instruction);
+  const raw = result.response.text();
+
+  let parsed;
+  try {
+    parsed = JSON.parse(raw);
+  } catch {
+    throw new Error('AI returned malformed JSON for logo design');
+  }
+
+  return parsed;
+}
+
+module.exports = { generateCaption, generateDesignContent, generateLogoDesign };

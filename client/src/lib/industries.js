@@ -1,0 +1,17 @@
+export const INDUSTRIES = [
+  { value: 'technology', label: 'Technology / SaaS', icon: '💻' },
+  { value: 'food', label: 'Food & Beverage', icon: '🍽️' },
+  { value: 'health', label: 'Health & Wellness', icon: '💊' },
+  { value: 'fashion', label: 'Fashion & Beauty', icon: '👗' },
+  { value: 'finance', label: 'Finance & Banking', icon: '💰' },
+  { value: 'education', label: 'Education', icon: '📚' },
+  { value: 'realestate', label: 'Real Estate', icon: '🏠' },
+  { value: 'travel', label: 'Travel & Hospitality', icon: '✈️' },
+  { value: 'ecommerce', label: 'E-commerce / Retail', icon: '🛒' },
+  { value: 'creative', label: 'Creative / Design', icon: '🎨' },
+  { value: 'fitness', label: 'Fitness & Sports', icon: '🏋️' },
+  { value: 'music', label: 'Music & Entertainment', icon: '🎵' },
+  { value: 'legal', label: 'Legal & Consulting', icon: '⚖️' },
+  { value: 'nonprofit', label: 'Nonprofit / Social', icon: '🤝' },
+  { value: 'other', label: 'Other', icon: '📦' },
+];
