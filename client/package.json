@@ -10,6 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@react-three/drei": "^10.7.7",
+    "@react-three/fiber": "^9.6.1",
     "@tailwindcss/vite": "^4.3.2",
     "axios": "^1.18.1",
     "colorthief": "^3.4.0",
@@ -18,7 +20,8 @@
     "react-colorful": "^5.7.0",
     "react-dom": "^19.2.7",
     "react-hot-toast": "^2.6.0",
-    "tailwindcss": "^4.3.2"
+    "tailwindcss": "^4.3.2",
+    "three": "^0.185.1"
   },
   "devDependencies": {
     "@types/react": "^19.2.17",

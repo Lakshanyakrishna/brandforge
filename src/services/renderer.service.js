@@ -1,11 +1,10 @@
-// Converts an HTML string into a 1080x1080 PNG buffer via headless Chromium.
-// The browser instance is launched once and reused across requests instead
-// of per-call, since browser startup is by far the slowest part of this.
-const puppeteer = require('puppeteer');
-
+let puppeteer;
 let browserPromise = null;
 
 function getBrowser() {
+    if (!puppeteer) {
+        puppeteer = require('puppeteer');
+    }
     if (!browserPromise) {
         browserPromise = puppeteer.launch({
             headless: true,

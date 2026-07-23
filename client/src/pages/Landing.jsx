@@ -1,6 +1,7 @@
-import { Sparkles, Palette, Image as ImageIcon, Layers } from 'lucide-react';
+import { Sparkles, Palette, Image as ImageIcon, Layers, ChevronDown } from 'lucide-react';
 import Button from '../components/Button';
-import BrandPreviewCard from '../components/BrandPreviewCard';
+import TiltCard from '../components/TiltCard';
+import HeroScene from '../components/HeroScene';
 
 const FEATURES = [
   {
@@ -31,13 +32,6 @@ const STEPS = [
   { title: 'Download & post', description: 'Get a platform-ready design in under 20 seconds.' },
 ];
 
-const DEMO_KIT = {
-  brandName: 'Bloom & Co.',
-  colors: { primary: '#5850ec', secondary: '#ffffff', accent: '#ec4899' },
-  fonts: { heading: 'Inter', body: 'Inter' },
-  toneOfVoice: 'Warm, friendly, a little playful.',
-};
-
 export default function Landing({ onGetStarted, onLogin }) {
   return (
     <div className="min-h-screen bg-background text-on-background">
@@ -66,40 +60,39 @@ export default function Landing({ onGetStarted, onLogin }) {
         <div className="pointer-events-none absolute -top-24 -left-24 w-96 h-96 rounded-full bg-primary-container/30 blur-3xl motion-safe:animate-[blob-float_20s_ease-in-out_infinite]" />
         <div className="pointer-events-none absolute top-32 -right-24 w-96 h-96 rounded-full bg-secondary-container/25 blur-3xl motion-safe:animate-[blob-float_24s_ease-in-out_infinite]" />
 
-        <div className="relative max-w-6xl mx-auto px-5 pt-16 pb-20 md:pt-24 md:pb-28 grid md:grid-cols-2 gap-12 items-center">
-          <div>
+        <div className="relative max-w-6xl mx-auto px-5 pt-16 pb-16 md:pt-20 md:pb-24 grid md:grid-cols-2 gap-8 items-center">
+          <div className="text-center md:text-left">
             <span className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-full bg-primary-container/20 text-primary border border-primary-container/30 mb-5">
               <Sparkles className="w-3.5 h-3.5" />
               AI-powered brand design
             </span>
-            <h1 className="text-4xl md:text-5xl font-bold leading-tight tracking-tight mb-4">
+            <h1 className="text-4xl md:text-6xl font-bold leading-[1.05] tracking-tight mb-4">
               On-brand social posts,<br className="hidden md:block" /> generated in seconds.
             </h1>
-            <p className="text-base text-on-surface-variant max-w-md mb-8">
+            <p className="text-base md:text-lg text-on-surface-variant max-w-md mx-auto md:mx-0 mb-8">
               Set up your brand once. Describe what you need. BrandForge generates a polished, on-brand design for any platform — no design skills required.
             </p>
-            <div className="flex flex-wrap items-center gap-3">
-              <Button size="lg" onClick={onGetStarted}>Get Started Free</Button>
+            <div className="flex flex-col items-center md:items-start gap-4">
               <Button
-                variant="secondary"
                 size="lg"
+                onClick={onGetStarted}
+                className="shadow-[0_0_50px_-10px_var(--color-primary-container)] hover:shadow-[0_0_60px_-8px_var(--color-primary-container)]"
+              >
+                Get Started Free
+              </Button>
+              <button
+                type="button"
                 onClick={() => document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' })}
+                className="inline-flex items-center gap-1 text-sm text-on-surface-variant hover:text-on-background transition-colors duration-150"
               >
                 See how it works
-              </Button>
+                <ChevronDown className="w-4 h-4" />
+              </button>
             </div>
           </div>
 
-          <div className="hidden md:flex justify-center">
-            <div className="w-full max-w-xs">
-              <BrandPreviewCard
-                brandName={DEMO_KIT.brandName}
-                colors={DEMO_KIT.colors}
-                fonts={DEMO_KIT.fonts}
-                toneOfVoice={DEMO_KIT.toneOfVoice}
-                mockup={{ device: 'iphone', background: '#0b1326', shadow: true }}
-              />
-            </div>
+          <div className="h-[340px] md:h-[440px] -mx-5 md:mx-0">
+            <HeroScene />
           </div>
         </div>
       </section>
@@ -111,16 +104,16 @@ export default function Landing({ onGetStarted, onLogin }) {
         </div>
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {FEATURES.map(({ icon: Icon, title, description }) => (
-            <div
+            <TiltCard
               key={title}
-              className="bg-surface-container-low rounded-2xl border border-surface-variant p-6 hover:bg-surface-container transition-colors duration-150"
+              className="bg-surface-container-low rounded-2xl border border-surface-variant p-6 hover:border-primary-container/50"
             >
               <div className="w-11 h-11 rounded-xl bg-primary-container flex items-center justify-center mb-4">
                 <Icon className="w-5 h-5 text-on-primary-container" />
               </div>
               <h3 className="font-semibold mb-1.5">{title}</h3>
               <p className="text-sm text-on-surface-variant">{description}</p>
-            </div>
+            </TiltCard>
           ))}
         </div>
       </section>
@@ -145,12 +138,23 @@ export default function Landing({ onGetStarted, onLogin }) {
         </div>
       </section>
 
-      <section className="max-w-6xl mx-auto px-5 py-20 text-center">
-        <h2 className="text-3xl font-bold mb-3">Ready to create on-brand content in seconds?</h2>
-        <p className="text-on-surface-variant mb-8 max-w-md mx-auto">
-          Set up your first brand kit and generate your first design in the next two minutes.
-        </p>
-        <Button size="lg" onClick={onGetStarted}>Get Started Free</Button>
+      <section className="max-w-6xl mx-auto px-5 py-20">
+        <div className="relative overflow-hidden rounded-3xl border border-primary-container/30 bg-surface-container-low px-6 py-16 text-center">
+          <div className="pointer-events-none absolute -top-32 left-1/2 -translate-x-1/2 w-[32rem] h-[32rem] rounded-full bg-primary-container/25 blur-3xl motion-safe:animate-[blob-float_18s_ease-in-out_infinite]" />
+          <div className="relative">
+            <h2 className="text-3xl md:text-4xl font-bold mb-3">Ready to create on-brand content in seconds?</h2>
+            <p className="text-on-surface-variant mb-8 max-w-md mx-auto">
+              Set up your first brand kit and generate your first design in the next two minutes.
+            </p>
+            <Button
+              size="lg"
+              onClick={onGetStarted}
+              className="shadow-[0_0_50px_-10px_var(--color-primary-container)] hover:shadow-[0_0_60px_-8px_var(--color-primary-container)]"
+            >
+              Get Started Free
+            </Button>
+          </div>
+        </div>
       </section>
 
       <footer className="border-t border-surface-variant">
