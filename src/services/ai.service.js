@@ -26,7 +26,11 @@ async function generateDesignContent(prompt, toneOfVoice) {
   });
 
   const instruction = `You are a senior social media copywriter. Brand tone of voice: "${toneOfVoice}".
-Given the campaign prompt below, return ONLY a JSON object with exactly these keys: "headline" (max 40 characters, punchy), "subheadline" (max 80 characters), "cta" (max 20 characters, e.g. "Shop Now").
+Given the campaign prompt below, return ONLY a JSON object with exactly these keys:
+"eyebrow" (max 20 characters, uppercase kicker label above the headline, e.g. "NEW COLLECTION", "LIMITED OFFER", "JUST LAUNCHED"),
+"headline" (max 40 characters, punchy),
+"subheadline" (max 80 characters),
+"cta" (max 20 characters, e.g. "Shop Now").
 Do not include markdown, code fences, HTML, or any explanation — only the raw JSON object.
 
 Campaign prompt: "${prompt}"`;

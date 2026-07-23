@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import toast from 'react-hot-toast';
-import { Camera, Briefcase, Users, MessageCircle, Check, Sparkles, Download, RotateCcw, Palette } from 'lucide-react';
+import { Camera, Briefcase, Users, MessageCircle, Check, Sparkles, Download, RotateCcw, Palette, Image as ImageIcon, X } from 'lucide-react';
 import api from '../api';
 import Card from '../components/Card';
 import Button from '../components/Button';
@@ -50,6 +50,8 @@ export default function GenerateDesign({ navigate }) {
   const [brandKitId, setBrandKitId] = useState(null);
   const [platform, setPlatform] = useState(null);
   const [prompt, setPrompt] = useState('');
+  const [photoFile, setPhotoFile] = useState(null);
+  const [photoPreviewUrl, setPhotoPreviewUrl] = useState(null);
   const [loading, setLoading] = useState(false);
   const [progressMsg, setProgressMsg] = useState(PROGRESS_MESSAGES[0]);
   const [result, setResult] = useState(null);
@@ -61,7 +63,23 @@ export default function GenerateDesign({ navigate }) {
 
   useEffect(() => () => clearInterval(progressTimer.current), []);
 
+  // Revoke the previous object URL whenever the photo changes or the page
+  // unmounts, so we don't leak blob URLs.
+  useEffect(() => () => { if (photoPreviewUrl) URL.revokeObjectURL(photoPreviewUrl); }, [photoPreviewUrl]);
+
   const step = brandKitId === null ? 0 : platform === null ? 1 : 2;
+
+  function handlePhotoChange(e) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setPhotoFile(file);
+    setPhotoPreviewUrl(URL.createObjectURL(file));
+  }
+
+  function removePhoto() {
+    setPhotoFile(null);
+    setPhotoPreviewUrl(null);
+  }
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -75,7 +93,17 @@ export default function GenerateDesign({ navigate }) {
     }, 3000);
 
     try {
-      const res = await api.post('/generate', { brandKitId, prompt, platform });
+      let res;
+      if (photoFile) {
+        const formData = new FormData();
+        formData.append('brandKitId', brandKitId);
+        formData.append('prompt', prompt);
+        formData.append('platform', platform);
+        formData.append('photo', photoFile);
+        res = await api.post('/generate', formData);
+      } else {
+        res = await api.post('/generate', { brandKitId, prompt, platform });
+      }
       setResult(res.data.data);
     } catch (err) {
       toast.error(err.response?.data?.message || 'Generation failed');
@@ -88,6 +116,7 @@ export default function GenerateDesign({ navigate }) {
   function generateAgain() {
     setResult(null);
     setPrompt('');
+    removePhoto();
   }
 
   if (brandKits !== null && brandKits.length === 0) {
@@ -180,6 +209,27 @@ export default function GenerateDesign({ navigate }) {
                     </button>
                   ))}
                 </div>
+
+                <label className="block text-sm font-medium text-on-surface mb-1.5">Product photo (optional)</label>
+                {photoPreviewUrl ? (
+                  <div className="flex items-center gap-3 mb-4">
+                    <img src={photoPreviewUrl} alt="Product preview" className="w-16 h-16 rounded-xl object-cover border border-surface-variant" />
+                    <div className="flex-1">
+                      <p className="text-xs text-on-surface-variant">Composited into the generated design.</p>
+                      <button type="button" onClick={removePhoto} className="inline-flex items-center gap-1 text-xs text-error hover:underline mt-1">
+                        <X className="w-3 h-3" />
+                        Remove
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <label className="flex items-center gap-2 p-3 mb-4 rounded-xl border border-dashed border-surface-variant text-sm text-on-surface-variant hover:border-on-surface-variant cursor-pointer transition-colors duration-150">
+                    <ImageIcon className="w-4 h-4 shrink-0" />
+                    Upload a product photo to feature in the design
+                    <input type="file" accept="image/*" onChange={handlePhotoChange} className="hidden" />
+                  </label>
+                )}
+
                 <Button type="submit" icon={Sparkles} size="lg" className="w-full sm:w-auto">
                   Generate Design
                 </Button>

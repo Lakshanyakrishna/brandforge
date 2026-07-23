@@ -3,7 +3,7 @@ const ApiResponse = require('../utils/ApiResponse');
 const designService = require('../services/design.service');
 
 const generateDesignController = asyncHandler(async (req, res) => {
-    const design = await designService.generateDesign(req.user._id, req.body);
+    const design = await designService.generateDesign(req.user._id, req.body, req.file);
     return res.status(201).json(new ApiResponse(201, design, 'Design generated successfully'));
 });
 
