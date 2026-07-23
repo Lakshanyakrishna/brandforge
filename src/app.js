@@ -22,6 +22,7 @@ const designRoutes = require('./routes/design.routes');
 
 
 const app = express();
+app.set('trust proxy', 1);
 
 // helmet sets a battery of protective headers (HSTS, X-Content-Type-Options,
 // X-Frame-Options, etc). Its default Content-Security-Policy is disabled
