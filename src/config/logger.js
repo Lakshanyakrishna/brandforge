@@ -27,11 +27,9 @@ const fileFormat = combine(
 
 const transports = [];
 
-if (process.env.VERCEL || !config.isProduction) {
-    transports.push(new winston.transports.Console({ format: consoleFormat }));
-}
+transports.push(new winston.transports.Console({ format: consoleFormat }));
 
-if (!process.env.VERCEL) {
+if (!process.env.VERCEL && !process.env.RENDER) {
     transports.push(
         new winston.transports.File({
             filename: path.join(LOGS_DIR, 'error.log'),

@@ -13,9 +13,15 @@ const SIZES = {
   lg: 'text-base px-5 py-3 gap-2',
 };
 
+const RADII = {
+  lg: 'rounded-lg',
+  full: 'rounded-full',
+};
+
 export default function Button({
   variant = 'primary',
   size = 'md',
+  radius = 'lg',
   loading = false,
   icon: Icon,
   className = '',
@@ -26,7 +32,7 @@ export default function Button({
   return (
     <button
       disabled={disabled || loading}
-      className={`inline-flex items-center justify-center rounded-lg font-medium transition-colors duration-150 disabled:cursor-not-allowed outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background ${VARIANTS[variant]} ${SIZES[size]} ${className}`}
+      className={`inline-flex items-center justify-center font-medium transition-colors duration-150 disabled:cursor-not-allowed outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background ${RADII[radius]} ${VARIANTS[variant]} ${SIZES[size]} ${className}`}
       {...props}
     >
       {loading ? (

@@ -91,7 +91,7 @@ export default function Landing({ onGetStarted, onLogin }) {
             </div>
           </div>
 
-          <div className="h-[340px] md:h-[440px] -mx-5 md:mx-0">
+          <div className="h-[340px] md:h-[440px] -mx-5 md:mx-0" aria-hidden="true">
             <HeroScene />
           </div>
         </div>

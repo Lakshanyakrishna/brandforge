@@ -1,6 +1,5 @@
 import { useRef } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { Float } from '@react-three/drei';
 import { MathUtils } from 'three';
 
 function HexMark({ reducedMotion }) {
@@ -24,8 +23,8 @@ function HexMark({ reducedMotion }) {
     <group ref={groupRef} rotation={[0.4, 0.6, 0]}>
       <mesh castShadow receiveShadow>
         <cylinderGeometry args={[1.5, 1.5, 0.95, 6]} />
-        <meshStandardMaterial attach="material-0" color="#5850ec" roughness={0.35} metalness={0.45} />
-        <meshStandardMaterial attach="material-1" color="#c3c0ff" roughness={0.2} metalness={0.2} />
+        <meshStandardMaterial attach="material-0" color="#5850ec" emissive="#5850ec" emissiveIntensity={0.3} roughness={0.4} metalness={0.3} />
+        <meshStandardMaterial attach="material-1" color="#c3c0ff" emissive="#c3c0ff" emissiveIntensity={0.2} roughness={0.25} metalness={0.15} />
         <meshStandardMaterial attach="material-2" color="#100b26" roughness={0.55} metalness={0.3} />
       </mesh>
     </group>
@@ -69,10 +68,10 @@ export default function HeroScene3D({ reducedMotion }) {
       camera={{ position: [0, 0, 6], fov: 38 }}
       style={{ touchAction: 'pan-y' }}
     >
-      <ambientLight intensity={0.7} />
-      <pointLight position={[4, 4, 5]} intensity={120} color="#8b7bff" decay={2} />
-      <pointLight position={[-4, -2, -4]} intensity={60} color="#47bfff" decay={2} />
-      <directionalLight position={[2, 3, 4]} intensity={0.6} />
+      <ambientLight intensity={0.8} />
+      <pointLight position={[4, 4, 5]} intensity={160} color="#a996ff" decay={2} />
+      <pointLight position={[-4, -2, -4]} intensity={14} color="#47bfff" decay={2} />
+      <directionalLight position={[2, 3, 4]} intensity={0.7} />
       <HexMark reducedMotion={reducedMotion} />
       <FloatingAccents reducedMotion={reducedMotion} />
     </Canvas>
