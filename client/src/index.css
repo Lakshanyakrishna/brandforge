@@ -46,3 +46,8 @@ body {
   33% { transform: translate(20px, -30px) scale(1.06); }
   66% { transform: translate(-15px, 15px) scale(0.96); }
 }
+
+@keyframes node-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}

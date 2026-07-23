@@ -31,35 +31,6 @@ function HexMark({ reducedMotion }) {
   );
 }
 
-function FloatingAccents({ reducedMotion }) {
-  const floatIntensity = reducedMotion ? 0 : 1.2;
-  const rotationIntensity = reducedMotion ? 0 : 1;
-  const speed = reducedMotion ? 0 : 1.6;
-
-  return (
-    <>
-      <Float speed={speed} floatIntensity={floatIntensity} rotationIntensity={rotationIntensity}>
-        <mesh position={[-2.5, 1.2, -1]}>
-          <icosahedronGeometry args={[0.32, 0]} />
-          <meshStandardMaterial color="#ec4899" roughness={0.3} metalness={0.5} emissive="#ec4899" emissiveIntensity={0.4} />
-        </mesh>
-      </Float>
-      <Float speed={speed * 0.8} floatIntensity={floatIntensity * 1.3} rotationIntensity={rotationIntensity * 0.7}>
-        <mesh position={[2.4, -0.9, -0.6]}>
-          <octahedronGeometry args={[0.28, 0]} />
-          <meshStandardMaterial color="#47bfff" roughness={0.25} metalness={0.5} emissive="#47bfff" emissiveIntensity={0.4} />
-        </mesh>
-      </Float>
-      <Float speed={speed * 1.3} floatIntensity={floatIntensity * 0.8} rotationIntensity={rotationIntensity * 1.3}>
-        <mesh position={[1.7, 1.6, -1.2]}>
-          <torusGeometry args={[0.2, 0.07, 12, 24]} />
-          <meshStandardMaterial color="#c3c0ff" roughness={0.4} metalness={0.4} />
-        </mesh>
-      </Float>
-    </>
-  );
-}
-
 export default function HeroScene3D({ reducedMotion }) {
   return (
     <Canvas
@@ -73,7 +44,6 @@ export default function HeroScene3D({ reducedMotion }) {
       <pointLight position={[-4, -2, -4]} intensity={14} color="#47bfff" decay={2} />
       <directionalLight position={[2, 3, 4]} intensity={0.7} />
       <HexMark reducedMotion={reducedMotion} />
-      <FloatingAccents reducedMotion={reducedMotion} />
     </Canvas>
   );
 }

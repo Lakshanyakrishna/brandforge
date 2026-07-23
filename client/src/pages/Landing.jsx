@@ -1,7 +1,8 @@
-import { Sparkles, Palette, Image as ImageIcon, Layers, ChevronDown } from 'lucide-react';
+import { Sparkles, Palette, Image as ImageIcon, Layers, ChevronDown, Camera, Briefcase, Users, MessageCircle } from 'lucide-react';
 import Button from '../components/Button';
 import TiltCard from '../components/TiltCard';
 import HeroScene from '../components/HeroScene';
+import OrbitNodes from '../components/OrbitNodes';
 
 const FEATURES = [
   {
@@ -32,6 +33,13 @@ const STEPS = [
   { title: 'Download & post', description: 'Get a platform-ready design in under 20 seconds.' },
 ];
 
+const PLATFORMS = [
+  { icon: Camera, label: 'Instagram' },
+  { icon: Briefcase, label: 'LinkedIn' },
+  { icon: Users, label: 'Facebook' },
+  { icon: MessageCircle, label: 'Twitter' },
+];
+
 export default function Landing({ onGetStarted, onLogin }) {
   return (
     <div className="min-h-screen bg-background text-on-background">
@@ -50,49 +58,81 @@ export default function Landing({ onGetStarted, onLogin }) {
           </nav>
 
           <div className="flex items-center gap-2">
-            <Button variant="ghost" size="sm" onClick={onLogin}>Log in</Button>
-            <Button size="sm" onClick={onGetStarted}>Get Started</Button>
+            <Button variant="ghost" radius="full" size="sm" onClick={onLogin}>Log in</Button>
+            <Button radius="full" size="sm" onClick={onGetStarted}>Get Started</Button>
           </div>
         </div>
       </header>
 
-      <section className="relative overflow-hidden">
-        <div className="pointer-events-none absolute -top-24 -left-24 w-96 h-96 rounded-full bg-primary-container/30 blur-3xl motion-safe:animate-[blob-float_20s_ease-in-out_infinite]" />
-        <div className="pointer-events-none absolute top-32 -right-24 w-96 h-96 rounded-full bg-secondary-container/25 blur-3xl motion-safe:animate-[blob-float_24s_ease-in-out_infinite]" />
+      <section className="relative overflow-hidden mx-3 mt-3 md:mx-6 md:mt-5 rounded-[2rem] md:rounded-[2.5rem] border border-surface-variant bg-surface-container-low">
+        <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+          <div className="w-[40rem] h-[40rem] rounded-full bg-primary-container/15 blur-[100px]" />
+        </div>
+        <div className="pointer-events-none absolute -top-24 -left-24 w-96 h-96 rounded-full bg-primary-container/25 blur-3xl motion-safe:animate-[blob-float_20s_ease-in-out_infinite]" />
+        <div className="pointer-events-none absolute top-32 -right-24 w-96 h-96 rounded-full bg-secondary-container/20 blur-3xl motion-safe:animate-[blob-float_24s_ease-in-out_infinite]" />
 
-        <div className="relative max-w-6xl mx-auto px-5 pt-16 pb-16 md:pt-20 md:pb-24 grid md:grid-cols-2 gap-8 items-center">
-          <div className="text-center md:text-left">
-            <span className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-full bg-primary-container/20 text-primary border border-primary-container/30 mb-5">
-              <Sparkles className="w-3.5 h-3.5" />
-              AI-powered brand design
-            </span>
-            <h1 className="text-4xl md:text-6xl font-bold leading-[1.05] tracking-tight mb-4">
-              On-brand social posts,<br className="hidden md:block" /> generated in seconds.
-            </h1>
-            <p className="text-base md:text-lg text-on-surface-variant max-w-md mx-auto md:mx-0 mb-8">
-              Set up your brand once. Describe what you need. BrandForge generates a polished, on-brand design for any platform — no design skills required.
-            </p>
-            <div className="flex flex-col items-center md:items-start gap-4">
-              <Button
-                size="lg"
-                onClick={onGetStarted}
-                className="shadow-[0_0_50px_-10px_var(--color-primary-container)] hover:shadow-[0_0_60px_-8px_var(--color-primary-container)]"
-              >
-                Get Started Free
-              </Button>
-              <button
-                type="button"
-                onClick={() => document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' })}
-                className="inline-flex items-center gap-1 text-sm text-on-surface-variant hover:text-on-background transition-colors duration-150"
-              >
-                See how it works
-                <ChevronDown className="w-4 h-4" />
-              </button>
+        <div className="relative">
+          <div className="relative max-w-6xl mx-auto px-5 pt-14 pb-14 md:pt-20 md:pb-16 grid md:grid-cols-2 gap-8 items-center">
+            <div className="text-center md:text-left">
+              <span className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-full bg-primary-container/20 text-primary border border-primary-container/30 mb-5">
+                <Sparkles className="w-3.5 h-3.5" />
+                AI-powered brand design
+              </span>
+              <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold leading-[1.05] tracking-tight mb-4">
+                On-brand social posts,
+                <br className="hidden md:block" />
+                <span className="text-on-surface-variant"> generated in seconds.</span>
+              </h1>
+              <p className="text-base md:text-lg text-on-surface-variant max-w-md mx-auto md:mx-0 mb-8">
+                Set up your brand once. Describe what you need. BrandForge generates a polished, on-brand design for any platform — no design skills required.
+              </p>
+              <div className="flex flex-col items-center md:items-start gap-4">
+                <Button
+                  size="lg"
+                  radius="full"
+                  onClick={onGetStarted}
+                  className="shadow-[0_0_50px_-10px_var(--color-primary-container)] hover:shadow-[0_0_60px_-8px_var(--color-primary-container)]"
+                >
+                  Get Started Free
+                </Button>
+                <button
+                  type="button"
+                  onClick={() => document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' })}
+                  className="inline-flex items-center gap-1 text-sm text-on-surface-variant hover:text-on-background transition-colors duration-150"
+                >
+                  See how it works
+                  <ChevronDown className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+
+            <div className="relative h-[340px] md:h-[440px] -mx-5 md:mx-0">
+              <div className="absolute inset-0" aria-hidden="true">
+                <HeroScene />
+              </div>
+              <OrbitNodes />
             </div>
           </div>
 
-          <div className="h-[340px] md:h-[440px] -mx-5 md:mx-0" aria-hidden="true">
-            <HeroScene />
+          <div className="hidden md:flex absolute bottom-4 left-8 items-center gap-2 text-xs text-on-surface-variant">
+            <span className="w-7 h-7 rounded-full border border-surface-variant flex items-center justify-center motion-safe:animate-bounce">
+              <ChevronDown className="w-3.5 h-3.5" />
+            </span>
+            Scroll to explore
+          </div>
+        </div>
+
+        <div className="relative border-t border-surface-variant/60">
+          <div className="max-w-6xl mx-auto px-5 py-6 flex flex-col sm:flex-row items-center justify-center sm:justify-between gap-4">
+            <p className="text-xs font-medium text-on-surface-variant uppercase tracking-wide">Designed for</p>
+            <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 opacity-80">
+              {PLATFORMS.map(({ icon: Icon, label }) => (
+                <span key={label} className="flex items-center gap-1.5 text-sm text-on-surface-variant">
+                  <Icon className="w-4 h-4" />
+                  {label}
+                </span>
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -148,6 +188,7 @@ export default function Landing({ onGetStarted, onLogin }) {
             </p>
             <Button
               size="lg"
+              radius="full"
               onClick={onGetStarted}
               className="shadow-[0_0_50px_-10px_var(--color-primary-container)] hover:shadow-[0_0_60px_-8px_var(--color-primary-container)]"
             >
