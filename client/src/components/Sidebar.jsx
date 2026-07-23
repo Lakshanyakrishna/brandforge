@@ -34,8 +34,8 @@ export default function Sidebar({ page, setPage, onLogout, mobileOpen, onCloseMo
     <>
       <aside className="hidden md:flex md:flex-col md:w-60 md:shrink-0 md:h-screen md:sticky md:top-0 border-r border-surface-variant bg-surface-container-low py-6">
         <div className="px-6 mb-8 flex items-center gap-2">
-          <div className="w-7 h-7 rounded-lg bg-primary-container flex items-center justify-center">
-            <Sparkles className="w-4 h-4 text-on-primary-container" />
+          <div className="w-7 h-7 rounded-lg bg-white flex items-center justify-center p-1">
+            <img src="/logo-icon.png" alt="" className="w-full h-full object-contain" />
           </div>
           <span className="font-semibold text-on-background">BrandForge</span>
         </div>
@@ -57,8 +57,8 @@ export default function Sidebar({ page, setPage, onLogout, mobileOpen, onCloseMo
           <aside className="relative w-64 bg-surface-container-low h-full flex flex-col py-6 shadow-xl">
             <div className="px-6 mb-8 flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <div className="w-7 h-7 rounded-lg bg-primary-container flex items-center justify-center">
-                  <Sparkles className="w-4 h-4 text-on-primary-container" />
+                <div className="w-7 h-7 rounded-lg bg-white flex items-center justify-center p-1">
+                  <img src="/logo-icon.png" alt="" className="w-full h-full object-contain" />
                 </div>
                 <span className="font-semibold text-on-background">BrandForge</span>
               </div>

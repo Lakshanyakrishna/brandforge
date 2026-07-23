@@ -1,12 +1,12 @@
 import { useState } from 'react';
-import { Sparkles } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import toast from 'react-hot-toast';
 import api from '../api';
 import Button from '../components/Button';
 import { Field, Input } from '../components/Input';
 
-export default function Login({ onLogin }) {
-  const [mode, setMode] = useState('login');
+export default function Login({ onLogin, onBack, initialMode = 'login' }) {
+  const [mode, setMode] = useState(initialMode);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -28,11 +28,24 @@ export default function Login({ onLogin }) {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background px-4">
-      <div className="w-full max-w-sm">
+    <div className="min-h-screen flex items-center justify-center bg-background px-4 relative overflow-hidden">
+      <div className="pointer-events-none absolute top-0 left-1/2 -translate-x-1/2 w-[36rem] h-[36rem] rounded-full bg-primary-container/15 blur-3xl motion-safe:animate-[blob-float_22s_ease-in-out_infinite]" />
+
+      <div className="relative w-full max-w-sm">
+        {onBack && (
+          <button
+            type="button"
+            onClick={onBack}
+            className="flex items-center gap-1.5 text-sm text-on-surface-variant hover:text-on-background transition-colors duration-150 mb-6"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Back to home
+          </button>
+        )}
+
         <div className="flex flex-col items-center mb-8">
-          <div className="w-10 h-10 rounded-xl bg-primary-container flex items-center justify-center mb-3">
-            <Sparkles className="w-5 h-5 text-on-primary-container" />
+          <div className="w-14 h-14 rounded-2xl bg-white flex items-center justify-center p-2 mb-3">
+            <img src="/logo-icon.png" alt="BrandForge" className="w-full h-full object-contain" />
           </div>
           <h1 className="text-xl font-semibold text-on-background">BrandForge</h1>
           <p className="text-sm text-on-surface-variant mt-1">On-brand social designs, generated instantly.</p>

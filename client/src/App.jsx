@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Toaster } from 'react-hot-toast';
 import { Menu } from 'lucide-react';
 import Sidebar from './components/Sidebar';
+import Landing from './pages/Landing';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import BrandKit from './pages/BrandKit';
@@ -23,6 +24,7 @@ export default function App() {
   );
   const [page, setPage] = useState('Dashboard');
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const [authView, setAuthView] = useState('landing');
 
   function handleLogin() {
     localStorage.setItem('isAuthenticated', 'true');
@@ -38,7 +40,15 @@ export default function App() {
     return (
       <>
         <Toaster position="top-center" />
-        <Login onLogin={handleLogin} />
+        {authView === 'landing' ? (
+          <Landing onGetStarted={() => setAuthView('register')} onLogin={() => setAuthView('login')} />
+        ) : (
+          <Login
+            onLogin={handleLogin}
+            onBack={() => setAuthView('landing')}
+            initialMode={authView === 'register' ? 'register' : 'login'}
+          />
+        )}
       </>
     );
   }
@@ -58,7 +68,12 @@ export default function App() {
 
       <div className="flex-1 min-w-0">
         <header className="md:hidden flex items-center justify-between px-4 h-14 border-b border-surface-variant bg-surface-container-low sticky top-0 z-30">
-          <span className="font-semibold text-on-background">BrandForge</span>
+          <div className="flex items-center gap-2">
+            <div className="w-6 h-6 rounded-md bg-white flex items-center justify-center p-0.5">
+              <img src="/logo-icon.png" alt="" className="w-full h-full object-contain" />
+            </div>
+            <span className="font-semibold text-on-background">BrandForge</span>
+          </div>
           <button onClick={() => setMobileNavOpen(true)} className="text-on-surface-variant hover:text-on-surface">
             <Menu className="w-5 h-5" />
           </button>
